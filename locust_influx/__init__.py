@@ -36,7 +36,7 @@ def __listen_for_locust_events(node_id: str, event: str) -> Callable:
     :param event: The event name or description.
     """
 
-    def event_handler(**_):
+    def event_handler(**kwargs):
         time = datetime.utcnow()
         tags = {
         }
@@ -44,6 +44,8 @@ def __listen_for_locust_events(node_id: str, event: str) -> Callable:
             'node_id': node_id,
             'event': event
         }
+        if 'user_count' in kwargs:
+            fields.update({'user_count': kwargs.get('user_count')})
         point = __make_data_point('locust_events', tags, fields, time)
         cache.append(point)
 
